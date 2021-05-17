@@ -21,7 +21,7 @@ async function getURLWithJavascript(url) {
     let page = await browser.newPage();
     await page.setDefaultNavigationTimeout(30000);
     await page.goto(url, {
-        waitUntil: 'domcontentloaded'
+        waitUntil: 'networkidle2'
     });
     let response = await page.evaluate(() => document.documentElement.outerHTML);
     await browser.close();
@@ -67,7 +67,7 @@ const checkSites = [
     { URL: "https://www.proshop.dk/Spillekonsol/Sony-PlayStation-5-Nordic/2831713", validate: "Pick-up Points lagerstatus", change: "ukendt leveringsdato" },
     { URL: "https://www.bilka.dk/produkter/sony-playstation-5-standard/100532624/", validate: "PS5 Standard", change: "OutOfStock" },
     { URL: "https://www.elgiganten.dk/product/gaming/konsoller/playstation-konsoller/220276/playstation-5-ps5", validate: "PlayStation 5", change: "Ukendt leveringsdato" },
-    { URL: "https://www.power.dk/gaming-og-underholdning/playstation/playstation-konsoller/playstation-5/p-1077687/", validate: "Collect", change: "Ej på lager online", decodeJS: true },
+    { URL: "https://www.power.dk/gaming-og-underholdning/playstation/playstation-konsoller/playstation-5/p-1077687/", validate: "Collect", change: "stock-unavailable", decodeJS: true },
 ]
 function performCheck() {
     checkSites.forEach(function (item) {
