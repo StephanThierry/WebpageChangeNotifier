@@ -1,14 +1,9 @@
 const axios = require('axios');
 var nodemailer = require('nodemailer');
 const puppeteer = require('puppeteer-extra')
+const emailConfig = require('./email-config');
 
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'stephan@protek.dk',
-        pass: ''
-    }
-});
+var transporter = nodemailer.createTransport(emailConfig);
 
 var mailOptions = {
     from: 'noreply@protek.dk',
@@ -24,11 +19,11 @@ async function getURL(url) {
 async function getURLWithJavascript(url) {
     let browser = await puppeteer.launch({ headless: true });
     let page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(240000);
+    await page.setDefaultNavigationTimeout(25000);
     await page.goto(url, {
         waitUntil: 'networkidle2'
     });
-    let response = await page.evaluate(() => document.body.innerHTML);
+    let response = await page.evaluate(() => document.documentElement.outerHTML);
     await browser.close();
     return(response);
 }
