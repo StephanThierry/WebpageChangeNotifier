@@ -19,7 +19,7 @@ async function getURL(url) {
 async function getURLWithJavascript(url) {
     let browser = await puppeteer.launch({ headless: true });
     let page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(30000);
+    await page.setDefaultNavigationTimeout(40000);
     await page.goto(url, {
         waitUntil: 'networkidle2'
     });
