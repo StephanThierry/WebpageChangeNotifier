@@ -20,9 +20,11 @@ async function getURLWithJavascript(url) {
     let browser = await puppeteer.launch({ headless: true });
     let page = await browser.newPage();
     await page.setDefaultNavigationTimeout(60000);
-    await page.goto(url, {
-        waitUntil: 'networkidle2'
-    });
+    await page.goto(url);
+    await page.waitForSelector('.buy-area__webshop', {
+        visible: true,
+      });
+
     let response = await page.evaluate(() => document.documentElement.outerHTML);
     await browser.close();
     return(response);
