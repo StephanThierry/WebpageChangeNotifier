@@ -57,15 +57,13 @@ async function detectPageChange(url, validate, change, positiveChange, decodeJS)
 
         if (isValid && isChange) {
             mailOptions.text = "Try this URL: " + url;
-            /*
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.log(error);
                 } else {
                     console.log('Email sent: ' + info.response);
                 }
-            });*/
-            console.log("Email!");
+            });
         }
     } catch (err) {
         console.log("Failed: " + url + "  " + err.message);
