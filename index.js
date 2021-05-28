@@ -23,18 +23,19 @@ async function getURLWithJavascript(url) {
     await page.goto(url);
     await page.waitForSelector('.buy-area__webshop', {
         visible: true,
-      });
+    });
 
     let response = await page.evaluate(() => document.documentElement.outerHTML);
     await browser.close();
-    return(response);
+    return (response);
 }
 
-async function detectPageChange(url, validate, change, decodeJS) {
+async function detectPageChange(url, validate, change, positiveChange, decodeJS) {
     let resString;
     let found = false;
     try {
         let response = "";
+
         if (decodeJS) {
             response = await getURLWithJavascript(url);
         } else {
@@ -42,23 +43,32 @@ async function detectPageChange(url, validate, change, decodeJS) {
         }
 
         let isValid = (response.indexOf(validate) != -1);
-        let isChange = (response.indexOf(change) == -1);
+        let isChange = false;
+
+        if (positiveChange) {
+            isChange = (response.indexOf(change) != -1);
+        } else {
+            isChange = (response.indexOf(change) == -1);
+        }
+
         console.log(url);
         console.log("isValid: " + isValid + "  isChange: " + isChange);
         console.log();
 
         if (isValid && isChange) {
             mailOptions.text = "Try this URL: " + url;
+            /*
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.log(error);
                 } else {
                     console.log('Email sent: ' + info.response);
                 }
-            });
+            });*/
+            console.log("Email!");
         }
     } catch (err) {
-        console.log("Failed: " + err.message);
+        console.log("Failed: " + url + "  " + err.message);
         return (null);
     }
     return (resString);
@@ -70,11 +80,14 @@ const checkSites = [
     { URL: "https://www.bilka.dk/produkter/sony-playstation-5-standard/100532624/", validate: "PS5 Standard", change: "OutOfStock" },
     { URL: "https://www.elgiganten.dk/product/gaming/konsoller/playstation-konsoller/220276/playstation-5-ps5", validate: "PlayStation 5", change: "Ukendt leveringsdato" },
     { URL: "https://www.power.dk/gaming-og-underholdning/playstation/playstation-konsoller/playstation-5/p-1077687/", validate: "Collect", change: "stock-unavailable", decodeJS: true },
+    { URL: "https://www.br.dk/produkter/sony-playstation-5-standard/100532624/", validate: "PS5 Standard", change: "OutOfStock" },
+    { URL: "https://cdon.dk/spil/playstation/playstation-5-konsol/", validate: "Playstation 5 - Konsol", change: "produktet er faret vild"},
+
 ]
 function performCheck() {
     checkSites.forEach(function (item) {
         (async function (item) {
-            await detectPageChange(item.URL, item.validate, item.change, item.decodeJS);
+            await detectPageChange(item.URL, item.validate, item.change, item.positiveChange, item.decodeJS);
         })(item)
     })
 
