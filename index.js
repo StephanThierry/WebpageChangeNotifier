@@ -3,6 +3,8 @@ var nodemailer = require('nodemailer');
 const puppeteer = require('puppeteer-extra')
 const emailConfig = require('./email-config');
 
+const global_timeout = 60000;
+
 var transporter = nodemailer.createTransport(emailConfig);
 
 var mailOptions = {
@@ -19,12 +21,13 @@ async function getURL(url) {
 async function getURLWithJavascript(url, waitForSelector) {
     let browser = await puppeteer.launch({ headless: true });
     let page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(60000);
+    await page.setDefaultNavigationTimeout(global_timeout);
     await page.goto(url);
 
     if (waitForSelector) {
         await page.waitForSelector(waitForSelector, {
             visible: true,
+            timeout: global_timeout
         });
     }
 
