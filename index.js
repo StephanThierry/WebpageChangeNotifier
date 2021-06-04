@@ -94,7 +94,7 @@ function performCheck() {
         })(item)
     })
 
-    let minutes = 45;
+    let minutes = 90;
     console.log(new Date().toString() + " - Que next run in " + minutes + " minues.");
     setTimeout(performCheck, 1000 * 60 * minutes);
 }
