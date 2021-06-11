@@ -85,7 +85,7 @@ const checkSites = [
     { URL: "https://www.bilka.dk/elektronik/computere-og-gaming/konsoller-og-spil/playstation-5/playstation-5-konsoller/pl/ps5-konsol/", validate: "PlayStation 5 konsoller", change: "no-results", decodeJS: true, waitForSelector: '.image__container'  },
     { URL: "https://www.elgiganten.dk/product/gaming/konsoller/playstation-konsoller/220276/playstation-5-ps5", validate: "PlayStation 5", change: "Ukendt leveringsdato" },
     { URL: "https://www.power.dk/gaming-og-underholdning/playstation/playstation-konsoller/playstation-5/p-1077687/", validate: "Collect", change: "stock-unavailable", decodeJS: true, waitForSelector: '.buy-area__webshop' },
-    { URL: "https://www.br.dk/produkter/sony-playstation-5-standard/100532624/", validate: "PlayStation 5 konsoller", change: "Ikke på lager online" },
+    { URL: "https://www.br.dk/produkter/sony-playstation-5-standard/100532624/", validate: "PlayStation 5 konsoller", change: "Ikke på lager online", decodeJS: true },
     { URL: "https://cdon.dk/spil/playstation/playstation-5-konsol/", validate: "Playstation 5 - Konsol", change: "produktet er faret vild" },
 ]
 function performCheck() {
