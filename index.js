@@ -83,10 +83,10 @@ async function detectPageChange(url, validate, change, positiveChange, decodeJS,
 const checkSites = [
     { URL: "https://www.proshop.dk/Spillekonsol/Sony-PlayStation-5-Nordic/2831713", validate: "Pick-up Points lagerstatus", change: "ukendt leveringsdato", decodeJS: true, waitForSelector: '.site-currency-attention' },
     { URL: "https://www.bilka.dk/elektronik/computere-og-gaming/konsoller-og-spil/playstation-5/playstation-5-konsoller/pl/ps5-konsol/", validate: "PlayStation 5 konsoller", change: "no-results", decodeJS: true, waitForSelector: '.image__container'  },
-/*    { URL: "https://www.elgiganten.dk/product/gaming/konsoller/playstation-konsoller/220276/playstation-5-ps5", validate: "PlayStation 5", change: "Ukendt leveringsdato" },*/
+    { URL: "https://www.elgiganten.dk/product/gaming/konsoller/playstation-konsoller/220276/playstation-5-ps5", validate: "PlayStation 5", change: "Ukendt leveringsdato" },
     { URL: "https://www.power.dk/gaming-og-underholdning/playstation/playstation-konsoller/playstation-5/p-1077687/", validate: "Collect", change: "stock-unavailable", decodeJS: true, waitForSelector: '.buy-area__webshop' },
 /*    { URL: "https://www.br.dk/produkter/sony-playstation-5-digital/100553322/", validate: "PlayStation 5 konsoller", change: "Ikke på lager online", decodeJS: true },*/
-    { URL: "https://cdon.dk/spil/playstation/playstation-5-konsol/", validate: "Playstation 5 - Konsol", change: "produktet er faret vild" },
+    { URL: "https://cdon.dk/spil/playstation/playstation-5-konsol/", validate: "Playstation 5 - Konsol", change: "produktet er faret vild", decodeJS: true, waitForSelector: '.product-page-header__title' },
 ]
 function performCheck() {
     checkSites.forEach(function (item) {
