@@ -89,10 +89,10 @@ async function detectPageChange(browser, url, validate, change, positiveChange, 
 const checkBilka = (inputString) => {
     let varehus = countStrings(inputString, "Ingen på lager i varehuse");
     let online = countStrings(inputString, "Ikke på lager online");
-    let condition =  varehus != 4 || online != 3;   
+    let condition =  varehus != 2 || online != 1;   
     console.log("ikke i varehus", varehus);
     console.log("ikke online", online);
-    console.log("varehus != 4 || online != 3", condition);
+    console.log("varehus != 2 || online != 1", condition);
     return (condition);
 }
 
