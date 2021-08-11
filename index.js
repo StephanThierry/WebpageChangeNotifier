@@ -19,7 +19,7 @@ async function getURL(url) {
 }
 
 async function getURLWithJavascript(browser, url, waitForSelector) {
-    
+
     let page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
     await page.setDefaultNavigationTimeout(global_timeout);
@@ -34,13 +34,13 @@ async function getURLWithJavascript(browser, url, waitForSelector) {
 
     let response = await page.evaluate(() => document.documentElement.outerHTML);
     let pages = await browser.pages();
-    for(let i=0; i<pages.length;i++){
+    for (let i = 0; i < pages.length; i++) {
         await pages[i].close();
     }
     return (response);
 }
 
-async function detectPageChange(browser, url, validate, change, positiveChange, decodeJS, waitForSelector) {
+async function detectPageChange(browser, url, validate, change, positiveChange, decodeJS, waitForSelector, checkFunction) {
     let resString;
     let found = false;
     try {
@@ -55,12 +55,16 @@ async function detectPageChange(browser, url, validate, change, positiveChange, 
         let isValid = (response.indexOf(validate) != -1);
         let isChange = false;
 
-        if (positiveChange) {
-            isChange = (response.indexOf(change) != -1);
-        } else {
-            isChange = (response.indexOf(change) == -1);
+        if (checkFunction) {
+            isChange = checkFunction(response);
         }
-
+        else {
+            if (positiveChange) {
+                isChange = (response.indexOf(change) != -1);
+            } else {
+                isChange = (response.indexOf(change) == -1);
+            }
+        }
         console.log(url);
         console.log("isValid: " + isValid + "  isChange: " + isChange);
         console.log();
@@ -82,20 +86,36 @@ async function detectPageChange(browser, url, validate, change, positiveChange, 
     return (resString);
 }
 
+const checkBilka = (inputString) => {
+    let varehus = countStrings(inputString, "Ingen på lager i varehuse");
+    let online = countStrings(inputString, "Ikke på lager online");
+    let condition =  varehus != 4 || online != 3;   
+    console.log("ikke i varehus", varehus);
+    console.log("ikke online", online);
+    console.log("varehus != 4 || online != 3", condition);
+    return (condition);
+}
 
 const checkSites = [
     { URL: "https://www.proshop.dk/Spillekonsol/Sony-PlayStation-5-Nordic/2831713", validate: "Pick-up Points lagerstatus", change: "ukendt leveringsdato", decodeJS: true, waitForSelector: '.site-currency-attention' },
-    { URL: "https://www.bilka.dk/elektronik/computere-og-gaming/konsoller-og-spil/playstation-5/playstation-5-konsoller/pl/ps5-konsol/", validate: "PlayStation 5 konsoller", change: "<span data-v-07dde9e4=\"\" class=\"font-weight-bold\">1</span>", decodeJS: true, waitForSelector: '.products-container' },
+    { URL: "https://www.bilka.dk/elektronik/computere-og-gaming/konsoller-og-spil/playstation-5/playstation-5-konsoller/pl/ps5-konsol/", validate: "PlayStation 5 konsoller", checkFunction: checkBilka, decodeJS: true, waitForSelector: '.products-container' },
     { URL: "https://www.elgiganten.dk/product/gaming/konsoller/playstation-konsoller/220276/playstation-5-ps5", validate: "PlayStation 5", change: "Ukendt leveringsdato", decodeJS: true },
     { URL: "https://www.power.dk/gaming-og-underholdning/playstation/playstation-konsoller/playstation-5/p-1077687/", validate: "Collect", change: "stock-unavailable", decodeJS: true, waitForSelector: '.buy-area__webshop' },
     { URL: "https://cdon.dk/spil/playstation/playstation-5-konsol/", validate: "Playstation 5 - Konsol", change: "produktet er faret vild", decodeJS: true, waitForSelector: '.product-page-header__title' },
 ]
+
+
+function countStrings(inputString, search) {
+    var regex = new RegExp(search, 'g');
+    return (inputString.match(regex || []).length);
+}
+
 function performCheck() {
     (async function () {
         let browser = await puppeteer.launch({ headless: true });
         for (let i = 0; i < checkSites.length; i++) {
             item = checkSites[i];
-            await detectPageChange(browser, item.URL, item.validate, item.change, item.positiveChange, item.decodeJS, item.waitForSelector);
+            await detectPageChange(browser, item.URL, item.validate, item.change, item.positiveChange, item.decodeJS, item.waitForSelector, item.checkFunction);
         }
         await browser.close();
     })()
