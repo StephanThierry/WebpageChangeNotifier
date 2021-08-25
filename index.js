@@ -99,7 +99,7 @@ const checkBilka = (inputString) => {
 const checkSites = [
     { URL: "https://www.proshop.dk/Spillekonsol/Sony-PlayStation-5-Nordic/2831713", validate: "Pick-up Points lagerstatus", change: "ukendt leveringsdato", decodeJS: true, waitForSelector: '.site-currency-attention' },
     { URL: "https://www.bilka.dk/elektronik/computere-og-gaming/konsoller-og-spil/playstation-5/playstation-5-konsoller/pl/ps5-konsol/", validate: "PlayStation 5 konsoller", checkFunction: checkBilka, decodeJS: true, waitForSelector: '.products-container' },
-    { URL: "https://www.elgiganten.dk/product/gaming/konsoller/playstation-konsoller/220276/playstation-5-ps5", validate: "PlayStation 5", change: "Ukendt leveringsdato", decodeJS: true },
+    { URL: "https://www.elgiganten.dk/product/gaming/spillekonsol/playstation/playstation-spillekonsol/playstation-5-ps5/220276", validate: "PlayStation 5", change: "unavailable", decodeJS: true, waitForSelector: ".product-title" },
     { URL: "https://www.power.dk/gaming-og-underholdning/playstation/playstation-konsoller/playstation-5/p-1077687/", validate: "Collect", change: "stock-unavailable", decodeJS: true, waitForSelector: '.buy-area__webshop' },
     { URL: "https://cdon.dk/spil/playstation/playstation-5-konsol/", validate: "Playstation 5 - Konsol", change: "produktet er faret vild", decodeJS: true, waitForSelector: '.product-page-header__title' },
 ]
